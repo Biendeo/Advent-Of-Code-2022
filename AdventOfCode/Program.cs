@@ -1,11 +1,10 @@
 ﻿using AdventOfCodeLib;
 using System.Diagnostics;
-using System.Net;
 
 static ChallengeResult RunSolution(IDayChallenge dayChallenge, int part, string[] inputLines) {
 	Stopwatch stopwatch = new();
 	stopwatch.Start();
-	string result = part == 1 ? dayChallenge.PartOneFromFile(inputLines) : dayChallenge.PartTwoFromFile(inputLines);
+	string result = part == 1 ? dayChallenge.PartOneFromInput(inputLines) : dayChallenge.PartTwoFromInput(inputLines);
 	stopwatch.Stop();
 	return new ChallengeResult(dayChallenge, part, result, stopwatch.ElapsedTicks);
 }
@@ -31,17 +30,17 @@ List<Func<ChallengeResult>> multiThreadedChallenges = new();
 	httpClient.BaseAddress = new(@"https://adventofcode.com/");
 	httpClient.DefaultRequestHeaders.Add("cookie", $"session={session}");
 
-	foreach (IDayChallenge dayChallenge in dayChallenges) {
+	foreach (IDayChallenge dayChallenge in dayChallenges.Where(dc => !dc.IsIgnored)) {
 		string dayWithLeadingZeroes = dayChallenge.Day.ToString().PadLeft(2, '0');
 		Console.WriteLine($"Getting input for day {dayChallenge.Day}...");
 		string[] inputLines = httpClient.GetStringAsync($"/2021/day/{dayChallenge.Day}/input").Result.Trim().Split('\n');
-		Func<ChallengeResult> partOneTask = () => RunSolution(dayChallenge, 1, inputLines);
+		ChallengeResult partOneTask() => RunSolution(dayChallenge, 1, inputLines);
 		if (dayChallenge.IsPartOneSingleThreaded) {
 			singleThreadedChallenges.Add(partOneTask);
 		} else {
 			multiThreadedChallenges.Add(partOneTask);
 		}
-		Func<ChallengeResult> partTwoTask = () => RunSolution(dayChallenge, 2, inputLines);
+		ChallengeResult partTwoTask() => RunSolution(dayChallenge, 2, inputLines);
 		if (dayChallenge.IsPartTwoSingleThreaded) {
 			singleThreadedChallenges.Add(partTwoTask);
 		} else {
@@ -72,4 +71,3 @@ foreach (ChallengeResult challengeResult in allResults.OrderBy(r => r.DayChallen
 Console.WriteLine($"Total time {stopwatch.ElapsedTicks / (Stopwatch.Frequency / 1000000)}μs");
 
 internal record ChallengeResult(IDayChallenge DayChallenge, int Part, string Result, long Ticks);
-internal record AdventOfCodeSecrets(string Session);

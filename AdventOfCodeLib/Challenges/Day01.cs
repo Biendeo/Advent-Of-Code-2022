@@ -2,11 +2,11 @@
 
 [DayDetails(Day = 1, Name = "Sonar Sweep")]
 public class Day01 : IDayChallenge {
-	public string PartOneFromFile(string[] inputLines) => PartOne(inputLines.Select(x => int.Parse(x)).ToList()).ToString();
+	public string PartOneFromInput(string[] inputLines) => PartOne(inputLines.Select(x => int.Parse(x)).ToList()).ToString();
 
 	public int PartOne(List<int> measurements) => CalculateIncreases(measurements, 1);
 
-	public string PartTwoFromFile(string[] inputLines) => PartTwo(inputLines.Select(x => int.Parse(x)).ToList()).ToString();
+	public string PartTwoFromInput(string[] inputLines) => PartTwo(inputLines.Select(x => int.Parse(x)).ToList()).ToString();
 
 	public int PartTwo(List<int> measurements) => CalculateIncreases(measurements, 3);
 
