@@ -5,12 +5,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <UserSecretsId>faecb559-e811-40d3-b786-b10f300d7c33</UserSecretsId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AdventOfCodeLib\AdventOfCodeLib.csproj" />
