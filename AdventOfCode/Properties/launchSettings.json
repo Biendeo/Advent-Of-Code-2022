@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "AdventOfCode": {
+      "commandName": "Project",
+      "workingDirectory": "$(SolutionDir)\\AdventOfCode",
+      "environmentVariables": {
+        "AdventOfCodeSession": "SESSION"
+      }
+    }
+  }
+}
