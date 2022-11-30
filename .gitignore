@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 /AdventOfCode/Properties/launchSettings.json
+/AdventOfCode/input

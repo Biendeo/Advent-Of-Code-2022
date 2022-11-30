@@ -14,6 +14,20 @@ static IDayChallenge[] GetAllDayChallenges() => typeof(IDayChallenge).Assembly.G
 	.Select(t => (IDayChallenge)t.GetConstructors().Single().Invoke(Array.Empty<object>()))
 	.ToArray();
 
+string[] GetDayInput(HttpClient httpClient, int day) {
+	if (!Directory.Exists("input")) {
+		Directory.CreateDirectory("input");
+	}
+	string expectedFilePath = Path.Join("input", $"{day}.txt");
+	if (!File.Exists(expectedFilePath)) {
+		string[] inputLines = httpClient.GetStringAsync($"/2021/day/{day}/input").Result.Trim().Split('\n');
+		File.WriteAllLines(expectedFilePath, inputLines);
+		return inputLines;
+	} else {
+		return File.ReadAllLines(expectedFilePath);
+	}
+}
+
 string? session = Environment.GetEnvironmentVariable("AdventOfCodeSession");
 if (session == null) {
 	Console.Error.WriteLine("Please set the \"AdventOfCodeSession\" environment variable from your cookie");
@@ -31,9 +45,8 @@ List<Func<ChallengeResult>> multiThreadedChallenges = new();
 	httpClient.DefaultRequestHeaders.Add("cookie", $"session={session}");
 
 	foreach (IDayChallenge dayChallenge in dayChallenges.Where(dc => !dc.IsIgnored)) {
-		string dayWithLeadingZeroes = dayChallenge.Day.ToString().PadLeft(2, '0');
 		Console.WriteLine($"Getting input for day {dayChallenge.Day}...");
-		string[] inputLines = httpClient.GetStringAsync($"/2021/day/{dayChallenge.Day}/input").Result.Trim().Split('\n');
+		string[] inputLines = GetDayInput(httpClient, dayChallenge.Day);
 		ChallengeResult partOneTask() => RunSolution(dayChallenge, 1, inputLines);
 		if (dayChallenge.IsPartOneSingleThreaded) {
 			singleThreadedChallenges.Add(partOneTask);
