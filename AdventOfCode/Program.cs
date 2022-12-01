@@ -25,7 +25,8 @@ internal class Program {
 	}
 
 	static BenchmarkResult BenchmarkSolution(IDayChallenge dayChallenge, int part, string[] inputLines, int iterations) {
-		long totalTicks = 0L;
+		long[] tickResults = new long[iterations];
+		int index = 0;
 		Enumerable.Range(0, iterations).AsParallel().ForAll((_) => {
 			Stopwatch stopwatch = new();
 			stopwatch.Start();
@@ -34,9 +35,13 @@ internal class Program {
 			else
 				dayChallenge.PartTwoFromInput(inputLines);
 			stopwatch.Stop();
-			Interlocked.Add(ref totalTicks, stopwatch.ElapsedTicks);
+			lock (tickResults) {
+				tickResults[index] = stopwatch.ElapsedTicks;
+				++index;
+			}
 		});
-		return new BenchmarkResult(dayChallenge, part, totalTicks, iterations);
+		long[] tickResultsSorted = tickResults.Order().ToArray();
+		return new BenchmarkResult(dayChallenge, part, tickResults.Sum(), tickResultsSorted.First(), tickResultsSorted[iterations / 2], tickResultsSorted.Last(), iterations);
 	}
 
 	static IDayChallenge[] GetAllDayChallenges() => typeof(IDayChallenge).Assembly.GetTypes()
@@ -134,8 +139,11 @@ internal class Program {
 				Console.WriteLine($"Day {dayChallenge.Day} - Part {i} - {dayChallenge.Name}");
 				BenchmarkResult benchmarkResult = BenchmarkSolution(dayChallenge, i, inputLines, iterations);
 				Console.WriteLine($"""
-					Completed {benchmarkResult.Iterations} in {benchmarkResult.Ticks / (Stopwatch.Frequency / 1000000)}μs
-					Averaged {benchmarkResult.Ticks / (Stopwatch.Frequency / 1000000.0) / benchmarkResult.Iterations:0.00000}μs
+					Completed {benchmarkResult.Iterations} in {benchmarkResult.TotalTicks / (Stopwatch.Frequency / 1000000)}μs
+					Average   {benchmarkResult.TotalTicks / (Stopwatch.Frequency / 1000000.0) / benchmarkResult.Iterations:0.00000}μs
+					Min       {benchmarkResult.MinTicks / (Stopwatch.Frequency / 1000000)}μs
+					Median    {benchmarkResult.MedianTicks / (Stopwatch.Frequency / 1000000)}μs
+					Max       {benchmarkResult.MaxTicks / (Stopwatch.Frequency / 1000000)}μs
 				
 					""");
 			}
@@ -144,4 +152,4 @@ internal class Program {
 }
 
 internal record ChallengeResult(IDayChallenge DayChallenge, int Part, string Result, long Ticks);
-internal record BenchmarkResult(IDayChallenge DayChallenge, int Part, long Ticks, int Iterations);
+internal record BenchmarkResult(IDayChallenge DayChallenge, int Part, long TotalTicks, long MinTicks, long MedianTicks, long MaxTicks, int Iterations);
