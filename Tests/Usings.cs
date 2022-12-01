@@ -1,2 +1,2 @@
 global using Xunit;
-global using AdventOfCodeLib;
+global using AdventOfCodeLib.Challenges;

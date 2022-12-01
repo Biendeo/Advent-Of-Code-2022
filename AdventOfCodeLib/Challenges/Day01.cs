@@ -1,14 +1,29 @@
 ﻿namespace AdventOfCodeLib.Challenges;
 
-[DayDetails(Day = 1, Name = "Sonar Sweep")]
+[DayDetails(Day = 1, Name = "Calorie Counting")]
 public class Day01 : IDayChallenge {
-	public string PartOneFromInput(string[] inputLines) => PartOne(inputLines.Select(x => int.Parse(x)).ToList()).ToString();
+	public string PartOneFromInput(string[] inputLines) => PartOne(inputLines).ToString();
 
-	public int PartOne(List<int> measurements) => CalculateIncreases(measurements, 1);
+	public int PartOne(string[] calories) => GetElfCaloriesFromInput(calories).Max(e => e.Sum());
 
-	public string PartTwoFromInput(string[] inputLines) => PartTwo(inputLines.Select(x => int.Parse(x)).ToList()).ToString();
+	public string PartTwoFromInput(string[] inputLines) => PartTwo(inputLines).ToString();
 
-	public int PartTwo(List<int> measurements) => CalculateIncreases(measurements, 3);
+	public int PartTwo(string[] calories) => GetElfCaloriesFromInput(calories).Select(e => e.Sum()).OrderByDescending(x => x).Take(3).Sum();
 
-	private int CalculateIncreases(List<int> measurements, int windowSize) => measurements.Zip(measurements.Skip(windowSize), (x, y) => x < y).Count(b => b);
+	private List<List<int>> GetElfCaloriesFromInput(string[] calories) {
+		List<List<int>> elfCalories = new();
+		List<int> currentElf = new();
+
+		foreach (string calorieReading in calories) {
+			if (string.IsNullOrEmpty(calorieReading)) {
+				elfCalories.Add(currentElf);
+				currentElf = new();
+			} else {
+				currentElf.Add(int.Parse(calorieReading));
+			}
+		}
+
+		elfCalories.Add(currentElf);
+		return elfCalories;
+	}
 }

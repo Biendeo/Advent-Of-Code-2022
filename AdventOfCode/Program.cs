@@ -14,13 +14,13 @@ static IDayChallenge[] GetAllDayChallenges() => typeof(IDayChallenge).Assembly.G
 	.Select(t => (IDayChallenge)t.GetConstructors().Single().Invoke(Array.Empty<object>()))
 	.ToArray();
 
-string[] GetDayInput(HttpClient httpClient, int day) {
+static string[] GetDayInput(HttpClient httpClient, int day) {
 	if (!Directory.Exists("input")) {
 		Directory.CreateDirectory("input");
 	}
 	string expectedFilePath = Path.Join("input", $"{day}.txt");
 	if (!File.Exists(expectedFilePath)) {
-		string[] inputLines = httpClient.GetStringAsync($"/2021/day/{day}/input").Result.Trim().Split('\n');
+		string[] inputLines = httpClient.GetStringAsync($"/2022/day/{day}/input").Result.Trim().Split('\n');
 		File.WriteAllLines(expectedFilePath, inputLines);
 		return inputLines;
 	} else {
@@ -39,8 +39,7 @@ IDayChallenge[] dayChallenges = GetAllDayChallenges();
 List<Func<ChallengeResult>> singleThreadedChallenges = new();
 List<Func<ChallengeResult>> multiThreadedChallenges = new();
 
-{
-	using HttpClient httpClient = new();
+using (HttpClient httpClient = new()) {
 	httpClient.BaseAddress = new(@"https://adventofcode.com/");
 	httpClient.DefaultRequestHeaders.Add("cookie", $"session={session}");
 
