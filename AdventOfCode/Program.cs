@@ -50,7 +50,7 @@ internal class Program {
 		.ToArray();
 
 	static HttpClient GetAdventOfCodeClient(string session) {
-		using HttpClient httpClient = new();
+		HttpClient httpClient = new();
 		httpClient.BaseAddress = new(@"https://adventofcode.com/");
 		httpClient.DefaultRequestHeaders.Add("cookie", $"session={session}");
 		return httpClient;
