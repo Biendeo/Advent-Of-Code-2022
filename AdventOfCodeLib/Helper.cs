@@ -42,4 +42,28 @@ internal static class Helper {
 			source = source.Skip(chunkSize);
 		}
 	}
+
+	/// <summary>
+	/// Returns an enumerable of <paramref name="groups"/> enumerables dividing <paramref name="source"/> evenly.
+	/// </summary>
+	internal static IEnumerable<IEnumerable<T>> Divide<T>(this IEnumerable<T> source, int groups) {
+		int itemSize = source.Count() / groups;
+		while (source.Any()) {
+			yield return source.Take(itemSize);
+			source = source.Skip(itemSize);
+		}
+	}
+
+	/// <summary>
+	/// Returns an enumerable of <typeparamref name="T"/> that contains only values common to all elements in <paramref name="source"/>.
+	/// </summary>
+	internal static IEnumerable<T> IntersectAll<T>(this IEnumerable<IEnumerable<T>> source) {
+		if (!source.Any())
+			return Enumerable.Empty<T>();
+		IEnumerable<T> set = new HashSet<T>(source.First());
+		foreach (IEnumerable<T> item in source.Skip(1)) {
+			set = set.Intersect(item);
+		}
+		return set;
+	}
 }
