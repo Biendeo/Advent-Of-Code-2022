@@ -32,4 +32,14 @@ internal static class Helper {
 	/// Returns a custom attribute if exists, or throws a <see cref="Exception"/> if not present.
 	/// </summary>
 	internal static T GetGuaranteedCustomAttribute<T>(this Type type) where T : Attribute => type.GetCustomAttribute<T>() ?? throw new Exception($"Custom attribute {typeof(T)} was not found on type {type}");
+
+	/// <summary>
+	/// Returns an enumerable where each element is <paramref name="chunkSize"/> elements of <paramref name="source"/> at a time.
+	/// </summary>
+	internal static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> source, int chunkSize) {
+		while (source.Any()) {
+			yield return source.Take(chunkSize);
+			source = source.Skip(chunkSize);
+		}
+	}
 }
