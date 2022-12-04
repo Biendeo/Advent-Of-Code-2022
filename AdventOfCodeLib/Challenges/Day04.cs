@@ -6,8 +6,8 @@ public class Day04 : IDayChallenge {
 
 	public int PartOne(string[] assignments) {
 		return assignments.Count(assignment => {
-			int[][] sections = assignment.Split(',').Select(elf => elf.Split('-').Select(section => int.Parse(section)).ToArray()).ToArray();
-			return (sections[0][0] <= sections[1][0] && sections[0][1] >= sections[1][1]) || (sections[1][0] <= sections[0][0] && sections[1][1] >= sections[0][1]);
+			int[][] sections = ParseAssignment(assignment);
+			return Enumerable.Range(0, 2).Any(x => sections[x][0] <= sections[1 - x][0] && sections[x][1] >= sections[1 - x][1]);
 		});
 	}
 
@@ -15,8 +15,10 @@ public class Day04 : IDayChallenge {
 
 	public int PartTwo(string[] assignments) {
 		return assignments.Count(assignment => {
-			int[][] sections = assignment.Split(',').Select(elf => elf.Split('-').Select(section => int.Parse(section)).ToArray()).ToArray();
-			return (sections[0][0] <= sections[1][0] && sections[0][1] >= sections[1][0]) || (sections[0][0] <= sections[1][1] && sections[0][1] >= sections[1][1]) || (sections[1][0] <= sections[0][0] && sections[1][1] >= sections[0][0]) || (sections[1][0] <= sections[0][1] && sections[1][1] >= sections[0][1]);
+			int[][] sections = ParseAssignment(assignment);
+			return Enumerable.Range(0, 2).Any(x => Enumerable.Range(0, 2).Any(y => (sections[x][0] <= sections[1 - x][y] && sections[x][1] >= sections[1 - x][y])));
 		});
 	}
+
+	private static int[][] ParseAssignment(string assignment) => assignment.Split(',').Select(elf => elf.Split('-').Select(section => int.Parse(section)).ToArray()).ToArray();
 }
