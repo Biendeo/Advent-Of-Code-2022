@@ -125,9 +125,9 @@ internal class Program {
 		List<ChallengeResult> allResults = singleThreadedResults.Concat(multiThreadedResults).ToList();
 		stopwatch.Stop();
 
-		foreach (ChallengeResult challengeResult in allResults.OrderBy(r => r.DayChallenge.Day * 2 + r.Part)) {
+		foreach (ChallengeResult challengeResult in allResults.OrderBy(r => r.DayChallenge.Attempt * 25 + r.DayChallenge.Day * 2 + r.Part)) {
 			Console.WriteLine($"""
-				Day {challengeResult.DayChallenge.Day} - Part {challengeResult.Part} - {challengeResult.DayChallenge.Name}
+				Day {challengeResult.DayChallenge.Day} - {challengeResult.DayChallenge.Name} - Part {challengeResult.Part} - Attempt {challengeResult.DayChallenge.Attempt}
 				{challengeResult.Result}
 				Completed in {challengeResult.Ticks / (Stopwatch.Frequency / 1000000)}μs
 
@@ -150,7 +150,7 @@ internal class Program {
 			string[] inputLines = GetDayInput(httpClient, dayChallenge.Day);
 
 			for (int i = 1; i <= 2; ++i) {
-				Console.WriteLine($"Day {dayChallenge.Day} - Part {i} - {dayChallenge.Name}");
+				Console.WriteLine($"Day {dayChallenge.Day} - {dayChallenge.Name} - Part {i} - Attempt {dayChallenge.Attempt}");
 				BenchmarkResult benchmarkResult = BenchmarkSolution(dayChallenge, i, inputLines, iterations);
 				Console.WriteLine($"""
 					Completed {benchmarkResult.Iterations} in {benchmarkResult.TotalTicks / (Stopwatch.Frequency / 1000000)}μs

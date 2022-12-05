@@ -25,4 +25,20 @@ public class Day04Tests {
 		string[] contents = input.Trim().Split(Environment.NewLine);
 		Assert.Equal(expectedResult, challenge.PartTwo(contents));
 	}
+
+	[Theory]
+	[InlineData(TestInput, 2)]
+	public void PartOnePrimitiveSucceeds(string input, int expectedResult) {
+		Day04Primitive challenge = new();
+		string[] assignments = input.Trim().Split(Environment.NewLine);
+		Assert.Equal(expectedResult, challenge.PartOne(assignments));
+	}
+
+	[Theory]
+	[InlineData(TestInput, 4)]
+	public void PartTwoPrimitiveSucceeds(string input, int expectedResult) {
+		Day04Primitive challenge = new();
+		string[] contents = input.Trim().Split(Environment.NewLine);
+		Assert.Equal(expectedResult, challenge.PartTwo(contents));
+	}
 }

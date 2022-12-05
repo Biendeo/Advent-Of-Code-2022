@@ -17,6 +17,11 @@ public interface IDayChallenge {
 	/// The day of this challenge.
 	/// </summary>
 	public int Day => GetType().GetGuaranteedCustomAttribute<DayDetailsAttribute>().Day;
+
+	/// <summary>
+	/// The attempt of this challenge.
+	/// </summary>
+	public int Attempt => GetType().GetGuaranteedCustomAttribute<DayDetailsAttribute>().Attempt;
 	/// <summary>
 	/// The name of this challenge.
 	/// </summary>
