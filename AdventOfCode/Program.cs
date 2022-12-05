@@ -27,19 +27,33 @@ internal class Program {
 	static BenchmarkResult BenchmarkSolution(IDayChallenge dayChallenge, int part, string[] inputLines, int iterations) {
 		long[] tickResults = new long[iterations];
 		int index = 0;
-		Enumerable.Range(0, iterations).AsParallel().ForAll((_) => {
-			Stopwatch stopwatch = new();
-			stopwatch.Start();
-			if (part == 1)
-				dayChallenge.PartOneFromInput(inputLines);
-			else
-				dayChallenge.PartTwoFromInput(inputLines);
-			stopwatch.Stop();
-			lock (tickResults) {
+		if (part == 1 && dayChallenge.IsPartOneSingleThreaded || part == 2 && dayChallenge.IsPartTwoSingleThreaded) {
+			Enumerable.Range(0, iterations).AsParallel().ForAll((_) => {
+				Stopwatch stopwatch = new();
+				stopwatch.Start();
+				if (part == 1)
+					dayChallenge.PartOneFromInput(inputLines);
+				else
+					dayChallenge.PartTwoFromInput(inputLines);
+				stopwatch.Stop();
+				lock (tickResults) {
+					tickResults[index] = stopwatch.ElapsedTicks;
+					++index;
+				}
+			});
+		} else {
+			foreach (int i in Enumerable.Range(0, iterations)) {
+				Stopwatch stopwatch = new();
+				stopwatch.Start();
+				if (part == 1)
+					dayChallenge.PartOneFromInput(inputLines);
+				else
+					dayChallenge.PartTwoFromInput(inputLines);
+				stopwatch.Stop();
 				tickResults[index] = stopwatch.ElapsedTicks;
 				++index;
 			}
-		});
+		}
 		long[] tickResultsSorted = tickResults.Order().ToArray();
 		return new BenchmarkResult(dayChallenge, part, tickResults.Sum(), tickResultsSorted.First(), tickResultsSorted[iterations / 2], tickResultsSorted.Last(), iterations);
 	}
@@ -62,7 +76,7 @@ internal class Program {
 		}
 		string expectedFilePath = Path.Join("input", $"{day}.txt");
 		if (!File.Exists(expectedFilePath)) {
-			string[] inputLines = httpClient.GetStringAsync($"/2022/day/{day}/input").Result.Trim().Split('\n');
+			string[] inputLines = httpClient.GetStringAsync($"/2022/day/{day}/input").Result.TrimEnd().Split('\n');
 			File.WriteAllLines(expectedFilePath, inputLines);
 			return inputLines;
 		} else {
