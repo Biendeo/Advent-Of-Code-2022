@@ -125,7 +125,7 @@ internal class Program {
 		List<ChallengeResult> allResults = singleThreadedResults.Concat(multiThreadedResults).ToList();
 		stopwatch.Stop();
 
-		foreach (ChallengeResult challengeResult in allResults.OrderBy(r => r.DayChallenge.Attempt * 25 + r.DayChallenge.Day * 2 + r.Part)) {
+		foreach (ChallengeResult challengeResult in allResults.OrderBy(r => r.DayChallenge.Day * 200 + r.DayChallenge.Attempt * 2 + r.Part)) {
 			Console.WriteLine($"""
 				Day {challengeResult.DayChallenge.Day} - {challengeResult.DayChallenge.Name} - Part {challengeResult.Part} - Attempt {challengeResult.DayChallenge.Attempt}
 				{challengeResult.Result}
@@ -145,7 +145,7 @@ internal class Program {
 
 		using HttpClient httpClient = GetAdventOfCodeClient(session);
 
-		foreach (IDayChallenge dayChallenge in dayChallenges) {
+		foreach (IDayChallenge dayChallenge in dayChallenges.Where(dc => !dc.IsIgnored).OrderBy(dc => dc.Day * 100 + dc.Attempt)) {
 			Console.WriteLine($"Getting input for day {dayChallenge.Day}...");
 			string[] inputLines = GetDayInput(httpClient, dayChallenge.Day);
 

@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCodeLib.Challenges;
 
-[DayDetails(Day = 5, Name = "Supply Stacks")]
+[DayDetails(Day = 5, Name = "Supply Stacks", Ignore = true)]
 public class Day05 : IDayChallenge {
 	private delegate void StackOperation(List<Stack<char>> stacks, int numCrates, int sourceStack, int destStack);
 
