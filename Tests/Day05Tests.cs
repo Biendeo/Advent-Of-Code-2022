@@ -28,4 +28,20 @@ public class Day05Tests {
 		string[] crates = input.Split(Environment.NewLine);
 		Assert.Equal(expectedResult, challenge.PartTwo(crates));
 	}
+
+	[Theory]
+	[InlineData(TestInput, "CMZ")]
+	public void PartOnePrimitiveSucceeds(string input, string expectedResult) {
+		Day05Primitive challenge = new();
+		string[] crates = input.Split(Environment.NewLine);
+		Assert.Equal(expectedResult, challenge.PartOne(crates));
+	}
+
+	[Theory]
+	[InlineData(TestInput, "MCD")]
+	public void PartTwoPrimitiveSucceeds(string input, string expectedResult) {
+		Day05Primitive challenge = new();
+		string[] crates = input.Split(Environment.NewLine);
+		Assert.Equal(expectedResult, challenge.PartTwo(crates));
+	}
 }

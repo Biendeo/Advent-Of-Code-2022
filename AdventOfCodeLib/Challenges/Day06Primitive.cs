@@ -7,6 +7,7 @@ public class Day06Primitive : IDayChallenge {
 	public int PartOne(string datastreamBuffer) {
 		for (int i = 0; i < datastreamBuffer.Length - 3; ++i) {
 			Span<bool> seen = stackalloc bool[256];
+			seen.Clear();
 			for (int j = i; j < i + 4; ++j) {
 				if (seen[datastreamBuffer[j]]) {
 					goto next;
@@ -25,6 +26,7 @@ public class Day06Primitive : IDayChallenge {
 	public int PartTwo(string datastreamBuffer) {
 		for (int i = 0; i < datastreamBuffer.Length - 13; ++i) {
 			Span<bool> seen = stackalloc bool[256];
+			seen.Clear();
 			for (int j = i; j < i + 14; ++j) {
 				if (seen[datastreamBuffer[j]]) {
 					goto next;

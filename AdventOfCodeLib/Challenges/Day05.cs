@@ -38,7 +38,6 @@ public class Day05 : IDayChallenge {
 		for (int i = 0; i < crates[inputDivider.Value - 1].Max() - '0'; ++i) {
 			stacks.Add(new());
 		}
-		Enumerable.Repeat(new Stack<char>(), crates[inputDivider.Value - 1].Max() - '0').ToList();
 		foreach (string s in crates[0..(inputDivider.Value - 1)].Reverse()) {
 			for (int i = 0; i < stacks.Count; ++i) {
 				char c = s[4 * i + 1];
