@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCodeLib.Challenges;
 
-[DayDetails(Day = 4, Name = "Camp Cleanup")]
+[DayDetails(Day = 4, Name = "Camp Cleanup", Ignore = true)]
 public class Day04 : IDayChallenge {
 	public string PartOneFromInput(string[] inputLines) => PartOne(inputLines).ToString();
 
