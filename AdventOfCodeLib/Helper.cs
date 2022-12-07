@@ -66,4 +66,6 @@ internal static class Helper {
 		}
 		return set;
 	}
+
+	internal static T IfElse<T>(this T t, Func<T, bool> f, T e) => f(t) ? t : e;
 }
