@@ -20,10 +20,7 @@ public class Day09 : IDayChallenge {
 	public int PartTwo(string[] motions) => Solve(motions, 10);
 
 	private int Solve(string[] motions, int numKnots) {
-		(int x, int y)[] ropePoints = new (int x, int y)[numKnots];
-		for (int i = 0; i < numKnots; ++i) {
-			ropePoints[i] = (0, 0);
-		}
+		(int x, int y)[] ropePoints = Enumerable.Repeat((0, 0), numKnots).ToArray();
 		HashSet<(int x, int y)> seenTailLocations = new() {
 			(0, 0)
 		};
