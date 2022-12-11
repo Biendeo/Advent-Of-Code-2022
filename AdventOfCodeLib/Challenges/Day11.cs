@@ -1,7 +1,4 @@
-﻿using System.Numerics;
-using System.Text;
-
-namespace AdventOfCodeLib.Challenges;
+﻿namespace AdventOfCodeLib.Challenges;
 
 [DayDetails(Day = 11, Name = "Monkey in the Middle")]
 public class Day11 : IDayChallenge {
