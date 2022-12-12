@@ -18,8 +18,8 @@ public class Day12 : IDayChallenge {
 
 	private static int StepsToGoal(string[] heightmap, int startX, int startY) {
 		HashSet<(int x, int y)> seenTiles = new() {
-				(startX, startY)
-			};
+			(startX, startY)
+		};
 		Queue<(int x, int y, int stepsSoFar)> tilesToSee = new();
 		tilesToSee.Enqueue((startX, startY, 0));
 		while (tilesToSee.Any()) {
