@@ -27,6 +27,7 @@ internal class Program {
 	static BenchmarkResult BenchmarkSolution(IDayChallenge dayChallenge, int part, string[] inputLines, int iterations) {
 		long[] tickResults = new long[iterations];
 		int index = 0;
+		Console.Write('[');
 		if (part == 1 && dayChallenge.IsPartOneSingleThreaded || part == 2 && dayChallenge.IsPartTwoSingleThreaded) {
 			Enumerable.Range(0, iterations).AsParallel().ForAll((_) => {
 				Stopwatch stopwatch = new();
@@ -39,6 +40,9 @@ internal class Program {
 				lock (tickResults) {
 					tickResults[index] = stopwatch.ElapsedTicks;
 					++index;
+					for (int i = ((index - 1) * 50 / iterations); i < (index * 50 / iterations); ++i) {
+						Console.Write('#');
+					}
 				}
 			});
 		} else {
@@ -52,8 +56,12 @@ internal class Program {
 				stopwatch.Stop();
 				tickResults[index] = stopwatch.ElapsedTicks;
 				++index;
+				for (int j = ((index - 1) * 50 / iterations); j < (index * 50 / iterations); ++j) {
+					Console.Write('#');
+				}
 			}
 		}
+		Console.WriteLine(']');
 		long[] tickResultsSorted = tickResults.Order().ToArray();
 		return new BenchmarkResult(dayChallenge, part, tickResults.Sum(), tickResultsSorted.First(), tickResultsSorted[iterations / 2], tickResultsSorted.Last(), iterations);
 	}
