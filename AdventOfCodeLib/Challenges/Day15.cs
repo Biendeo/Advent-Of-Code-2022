@@ -2,7 +2,7 @@
 
 namespace AdventOfCodeLib.Challenges;
 
-[DayDetails(Day = 15, Name = "Beacon Exclusion Zone", PartTwoSingleThreaded = false)]
+[DayDetails(Day = 15, Name = "Beacon Exclusion Zone", PartTwoSingleThreaded = false, Ignore = true)]
 public class Day15 : IDayChallenge {
 	public string PartOneFromInput(string[] inputLines) => PartOne(inputLines).ToString();
 
